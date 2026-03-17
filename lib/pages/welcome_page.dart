@@ -15,7 +15,7 @@ class WelcomePage extends StatelessWidget {
             children: [
               // Top Illustration
               Image.asset(
-                'assets/login_illustration.png', // replace with your image
+                'assets/images/welcome_boy.png', // replace with your image
                 height: 220,
               ),
 
@@ -98,11 +98,11 @@ class WelcomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  socialIcon('assets/google.png'),
+                  socialIcon('assets/images/google.png'),
                   const SizedBox(width: 20),
-                  socialIcon('assets/facebook.png'),
+                  socialIcon('assets/images/facebook.png'),
                   const SizedBox(width: 20),
-                  socialIcon('assets/instagram.png'),
+                  socialIcon('assets/images/instagram.png'),
                 ],
               ),
             ],
