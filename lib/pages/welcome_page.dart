@@ -6,7 +6,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(250, 249, 246, 100),
+      backgroundColor: const Color.fromARGB(156, 250, 249, 246),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -106,7 +106,7 @@ class WelcomePage extends StatelessWidget {
                 ],
               ),
             ],
-          ),g
+          ),
         ),
       ),
     );
