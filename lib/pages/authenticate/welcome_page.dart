@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:prana_ai/services/auth.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+  WelcomePage({super.key});
+
+  final AuthService _auth =
+      AuthService(); // ✅ allowed now (removed const constructor)
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +17,10 @@ class WelcomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Top Illustration
-              Image.asset(
-                'assets/images/welcome_boy.png', // replace with your image
-                height: 220,
-              ),
+              Image.asset('assets/images/welcome_boy.png', height: 220),
 
               const SizedBox(height: 20),
 
-              // Welcome Text
               const Text(
                 "Welcome",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -37,23 +36,42 @@ class WelcomePage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Login Button
-              Container(
+              // ✅ LOGIN BUTTON (CLICKABLE)
+              SizedBox(
                 width: double.infinity,
                 height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF4ADE80), Color(0xFF2563EB)],
+                child: ElevatedButton(
+                  onPressed: () async {
+                    dynamic result = await _auth.signInAnon();
+                    if (result == null) {
+                      print('Error sining in');
+                    } else {
+                      print('Sining in');
+                      print(result);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: EdgeInsets.zero,
                   ),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  child: Ink(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF4ADE80), Color(0xFF2563EB)],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -61,16 +79,19 @@ class WelcomePage extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              // Sign Up Button
-              Container(
+              // SIGN UP BUTTON
+              SizedBox(
                 width: double.infinity,
                 height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Colors.blue),
-                ),
-                child: const Center(
-                  child: Text(
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.blue),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: const Text(
                     "Sign Up",
                     style: TextStyle(
                       color: Colors.blue,
@@ -94,7 +115,6 @@ class WelcomePage extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // Social Icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
