@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "906419284291",
+    "project_id": "prana-aid",
+    "storage_bucket": "prana-aid.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906419284291:android:c945c534b350b30337e7f6",
+        "android_client_info": {
+          "package_name": "com.example.prana_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906419284291-745l4akvctrufq3icn5miubjnoa9qnsh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9Tcd7IA4-_CxztY2LfsvNDYp865N7_9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906419284291-745l4akvctrufq3icn5miubjnoa9qnsh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
