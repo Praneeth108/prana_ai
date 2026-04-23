@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+
   flutter:
     sdk: flutter
 
@@ -37,10 +38,15 @@ dependencies:
   firebase_auth: ^6.4.0
   cloud_firestore: ^6.3.0
   provider: ^6.1.5+1
+  tflite_flutter: ^0.10.0
+  image: ^4.0.17
+  image_picker: ^1.0.7
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -73,6 +79,9 @@ flutter:
    - assets/images/poison.jpg
    - assets/images/women.jpeg
    - assets/images/emer.jpg
+   - assets/model/model_unquant.tflite
+   - assets/model/labels.txt
+   
 
       
   # An image asset can refer to one or more resolution-specific "variants", see
