@@ -23,8 +23,13 @@ class EmergencyPage extends StatelessWidget {
                 ),
               ),
               child: Row(
-                children: const [
-                  Icon(Icons.arrow_back, color: Colors.white),
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                   SizedBox(width: 10),
                   Expanded(
                     child: Column(

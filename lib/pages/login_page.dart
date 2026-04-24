@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:prana_ai/services/auth.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +29,17 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                      child: Icon(Icons.arrow_back, color: Colors.black),
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.black),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ),
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundColor: Colors.white,
                       child: Icon(
                         Icons.edit,
@@ -52,7 +60,6 @@ class LoginPage extends StatelessWidget {
 
               const SizedBox(height: 80),
 
-              // Username
               _inputField(
                 label: "User name",
                 icon: Icons.person,
@@ -61,12 +68,10 @@ class LoginPage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Password
               _inputField(label: "Password", icon: Icons.lock, obscure: true),
 
               const SizedBox(height: 5),
 
-              // Forgot password
               const Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
@@ -112,9 +117,9 @@ class LoginPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 decoration: const BoxDecoration(color: Colors.white24),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
+                  children: [
                     Icon(Icons.calendar_month, size: 40),
                     Icon(Icons.person, size: 40),
                     Icon(Icons.medical_services, size: 40),
