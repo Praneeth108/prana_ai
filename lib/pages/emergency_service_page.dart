@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyPage extends StatelessWidget {
   const EmergencyPage({super.key});
+
+  // 📞 CALL FUNCTION 
+  Future<void> _makeCall(String number) async {
+    final Uri phoneUri = Uri.parse("tel:$number");
+
+    try {
+      await launchUrl(
+        phoneUri,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint("Cannot launch: $number");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-
       body: SafeArea(
         child: Column(
           children: [
@@ -26,12 +40,10 @@ class EmergencyPage extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
+                  const SizedBox(width: 10),
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -45,12 +57,15 @@ class EmergencyPage extends StatelessWidget {
                         ),
                         Text(
                           "Quick access to help",
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.phone, color: Colors.white),
+                  const Icon(Icons.phone, color: Colors.white),
                 ],
               ),
             ),
@@ -61,32 +76,14 @@ class EmergencyPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Nearby Hospitals",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            "GPS Active",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      "Nearby Hospitals",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
+
                     const SizedBox(height: 10),
 
                     Container(
@@ -100,75 +97,75 @@ class EmergencyPage extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 15),
-                    // 🔥 IMAGE CARDS
+
                     hotlineCard(
-                      "assets/images/emer.jpg",
-                      Colors.white,
-                      "Emergency Services",
-                      "Police",
-                      "CRITICAL",
-                      const Color.fromARGB(255, 35, 3, 245),
-                      "119",
+                      imagePath: "assets/images/emer.jpg",
+                      title: "Emergency Services",
+                      subtitle: "Police emergency service",
+                      level: "CRITICAL",
+                      levelColor: const Color.fromARGB(255, 35, 3, 245),
+                      number: "119",
+                      bgColor: Colors.white,
                     ),
 
                     hotlineCard(
-                      "assets/images/ambulance.jpg",
-                      Colors.white,
-                      "Ambulance",
-                      "Medical emergency ambulance",
-                      "HIGH",
-                      const Color.fromARGB(255, 215, 4, 4),
-                      "1990",
+                      imagePath: "assets/images/ambulance.jpg",
+                      title: "Ambulance",
+                      subtitle: "Medical emergency ambulance",
+                      level: "HIGH",
+                      levelColor: Colors.red,
+                      number: "1990",
+                      bgColor: Colors.white,
                     ),
 
                     hotlineCard(
-                      "assets/images/fire.jpg",
-                      Colors.white,
-                      "Fire Services",
-                      "Fire and rescue services",
-                      "HIGH",
-                      const Color.fromARGB(255, 215, 4, 4),
-                      "110",
+                      imagePath: "assets/images/fire.jpg",
+                      title: "Fire Services",
+                      subtitle: "Fire and rescue services",
+                      level: "HIGH",
+                      levelColor: Colors.red,
+                      number: "110",
+                      bgColor: Colors.white,
                     ),
 
                     hotlineCard(
-                      "assets/images/poison.jpg",
-                      Colors.white,
-                      "Poison Control",
-                      "Poison emergencies & guidance",
-                      "HIGH",
-                      const Color.fromARGB(255, 215, 4, 4),
-                      "0112686",
+                      imagePath: "assets/images/poison.jpg",
+                      title: "Poison Control",
+                      subtitle: "Poison emergencies & guidance",
+                      level: "HIGH",
+                      levelColor: Colors.red,
+                      number: "0112686",
+                      bgColor: Colors.white,
                     ),
 
                     hotlineCard(
-                      "assets/images/women.jpeg",
-                      Colors.white,
-                      "Women Helpline",
-                      "Emergency helpline for women",
-                      "MEDIUM",
-                      Colors.yellow,
-                      "1938",
+                      imagePath: "assets/images/women.jpeg",
+                      title: "Women Helpline",
+                      subtitle: "Emergency helpline for women",
+                      level: "MEDIUM",
+                      levelColor: Colors.yellow,
+                      number: "1938",
+                      bgColor: Colors.white,
                     ),
 
                     hotlineCard(
-                      "assets/images/child.jpg",
-                      Colors.white,
-                      "Child Helpline",
-                      "Child emergency & protection",
-                      "MEDIUM",
-                      Colors.yellow,
-                      "1929",
+                      imagePath: "assets/images/child.jpg",
+                      title: "Child Helpline",
+                      subtitle: "Child emergency & protection",
+                      level: "MEDIUM",
+                      levelColor: Colors.yellow,
+                      number: "1929",
+                      bgColor: Colors.white,
                     ),
 
                     hotlineCard(
-                      "assets/images/mental.jpg",
-                      Colors.white,
-                      "Mental Health Support",
-                      "Confidential support & crisis care",
-                      "MEDIUM",
-                      Colors.yellow,
-                      "1926",
+                      imagePath: "assets/images/mental.jpg",
+                      title: "Mental Health Support",
+                      subtitle: "Confidential support & crisis care",
+                      level: "MEDIUM",
+                      levelColor: Colors.yellow,
+                      number: "1926",
+                      bgColor: Colors.white,
                     ),
                   ],
                 ),
@@ -180,16 +177,16 @@ class EmergencyPage extends StatelessWidget {
     );
   }
 
-  // 🔥 CARD WITH IMAGE
-  Widget hotlineCard(
-    String imagePath,
-    Color bgColor,
-    String title,
-    String subtitle,
-    String level,
-    Color levelColor,
-    String number,
-  ) {
+  // 🔥 CARD WITH CALL FUNCTION
+  Widget hotlineCard({
+    required String imagePath,
+    required Color bgColor,
+    required String title,
+    required String subtitle,
+    required String level,
+    required Color levelColor,
+    required String number,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(14),
@@ -200,11 +197,10 @@ class EmergencyPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // TITLE + LABEL
+          // TITLE + LEVEL
           Stack(
             children: [
-              Align(
-                alignment: Alignment.center,
+              Center(
                 child: Text(
                   title,
                   style: const TextStyle(
@@ -235,7 +231,7 @@ class EmergencyPage extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // 🔹 IMAGE + TEXT
+          // IMAGE + TEXT
           Row(
             children: [
               Container(
@@ -257,7 +253,10 @@ class EmergencyPage extends StatelessWidget {
               Expanded(
                 child: Text(
                   subtitle,
-                  style: const TextStyle(fontSize: 15, color: Colors.black54),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ],
@@ -265,16 +264,19 @@ class EmergencyPage extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // 🔥 BUTTON
-          Align(
-            alignment: Alignment.bottomRight,
+          // 📞 CALL BUTTON (FIXED)
+          GestureDetector(
+            onTap: () => _makeCall(number),
             child: Container(
               width: 250,
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF53EB6A), Color(0xFF026E0D)],
+                  colors: [
+                    Color(0xFF53EB6A),
+                    Color(0xFF026E0D),
+                  ],
                 ),
               ),
               child: Row(
@@ -283,8 +285,11 @@ class EmergencyPage extends StatelessWidget {
                   const Icon(Icons.phone, color: Colors.white, size: 20),
                   const SizedBox(width: 5),
                   Text(
-                    number,
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    "Call $number",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
