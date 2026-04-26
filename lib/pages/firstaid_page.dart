@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prana_ai/pages/ayurvedic_page.dart';
 
 class FirstAidPage extends StatelessWidget {
   const FirstAidPage({super.key});
@@ -11,7 +12,7 @@ class FirstAidPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // 🔶 HEADER
+            //  HEADER
             Container(
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
@@ -20,8 +21,14 @@ class FirstAidPage extends StatelessWidget {
                 ),
               ),
               child: Row(
-                children: const [
-                  Icon(Icons.arrow_back, color: Colors.white),
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+
                   SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +183,15 @@ class FirstAidPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AyurvedicPage(),
+                                    ),
+                                  );
+                                },
                                 child: const Text(
                                   "View Ayurvedic Support Options",
                                   style: TextStyle(color: Colors.white),
@@ -190,7 +205,7 @@ class FirstAidPage extends StatelessWidget {
 
                     const SizedBox(height: 10),
 
-                    // ⚠️ WARNING
+                    //  WARNING
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
@@ -224,7 +239,7 @@ class FirstAidPage extends StatelessWidget {
 
                     const SizedBox(height: 25),
 
-                    // 🔵 BUTTON
+                    //  BUTTON
                     Center(
                       child: Container(
                         width: 200,

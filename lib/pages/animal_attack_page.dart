@@ -49,12 +49,19 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Animal Attack",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text("Select Specific Type", style: TextStyle(fontSize: 12)),
+                      Text(
+                        "Animal Attack",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        "Select Specific Type",
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -67,7 +74,7 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
               children: [
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
                   height: 220, // ✅ SAME SIZE LIKE IMAGE
                   decoration: BoxDecoration(
                     color: Colors.black87,
@@ -78,8 +85,7 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
                       ? const Center(
                           child: Text(
                             "Quick Identify",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 18),
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         )
                       : ClipRRect(
@@ -90,7 +96,7 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
 
                 // 🔴 CAMERA BUTTON
                 Positioned(
-                  bottom: -20,
+                  bottom: 0,
                   child: GestureDetector(
                     onTap: openCamera,
                     child: Container(
@@ -100,8 +106,11 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 3),
                       ),
-                      child: const Icon(Icons.camera_alt,
-                          color: Colors.white, size: 30),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
@@ -121,8 +130,10 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("How to Scan",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    "How to Scan",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: 5),
                   Text("1. Position the animal within the camera frame"),
                   Text("2. Ensure good lighting"),
@@ -171,9 +182,11 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
               color: color,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Text(level,
-                style: const TextStyle(color: Colors.white, fontSize: 10)),
-          )
+            child: Text(
+              level,
+              style: const TextStyle(color: Colors.white, fontSize: 10),
+            ),
+          ),
         ],
       ),
     );
