@@ -28,7 +28,7 @@ class AuthService {
     }
   }
 
-  // ✅ Sign out
+  //  Sign out
   Future<void> signOut() async {
     try {
       await _auth.signOut();

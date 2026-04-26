@@ -15,8 +15,14 @@ class SettingsPage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               color: Colors.blueGrey,
               child: Row(
-                children: const [
-                  Icon(Icons.arrow_back, color: Colors.white),
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+
                   SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

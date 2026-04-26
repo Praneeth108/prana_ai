@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:prana_ai/pages/signup_page.dart';
 import 'package:prana_ai/services/auth.dart';
+import 'package:prana_ai/pages/login_page.dart';
+import 'package:prana_ai/pages/wrapper.dart';
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({super.key});
 
-  final AuthService _auth =
-      AuthService(); // ✅ allowed now (removed const constructor)
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(156, 250, 249, 246),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -36,19 +38,15 @@ class WelcomePage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // ✅ LOGIN BUTTON (CLICKABLE)
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    dynamic result = await _auth.signInAnon();
-                    if (result == null) {
-                      print('Error sining in');
-                    } else {
-                      print('Sining in');
-                      print(result);
-                    }
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -79,12 +77,18 @@ class WelcomePage extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              // SIGN UP BUTTON
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpPage(),
+                      ),
+                    );
+                  },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.blue),
                     shape: RoundedRectangleBorder(
@@ -103,16 +107,12 @@ class WelcomePage extends StatelessWidget {
               ),
 
               const SizedBox(height: 25),
-
               const Text("OR"),
-
               const SizedBox(height: 10),
-
               const Text(
                 "Sign Up using",
                 style: TextStyle(color: Colors.black54),
               ),
-
               const SizedBox(height: 20),
 
               Row(
