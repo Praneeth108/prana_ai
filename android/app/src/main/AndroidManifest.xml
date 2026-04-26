@@ -2,6 +2,14 @@
 
     <!-- ✅ ADD CAMERA PERMISSION HERE -->
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <queries>
+    <intent>
+        <action android:name="android.intent.action.DIAL" />
+        <data android:scheme="tel" />
+    </intent>
+    </queries>
 
     <application
         android:label="prana_ai"
