@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:image/image.dart' as img;
+import 'package:flutter/services.dart';
+
 class AnimalAttackPage extends StatefulWidget {
   const AnimalAttackPage({super.key});
 
@@ -13,22 +17,105 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
 
+  Interpreter? _interpreter;
+  List<String> _labels = [];
+
+  String result = "No result";
+
+  @override
+  void initState() {
+    super.initState();
+    loadModel();
+    loadLabels(); // ✅ FIXED
+  }
+
+  // ✅ LOAD MODEL
+  Future<void> loadModel() async {
+    _interpreter = await Interpreter.fromAsset(
+      'assets/model/model_unquant.tflite',
+    );
+  }
+
+  // ✅ LOAD LABELS (FIXED)
+  Future<void> loadLabels() async {
+    final data = await rootBundle.loadString('assets/model/labels.txt');
+    _labels = data.split('\n');
+  }
+
   // 📸 OPEN CAMERA
   Future<void> openCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      _image = File(pickedFile.path);
+
+      await runModel();
+
+      setState(() {});
     }
+  }
+
+  // 🤖 RUN MODEL (FULL FIXED VERSION)
+  Future<void> runModel() async {
+    if (_image == null || _interpreter == null) return;
+
+    // 🔹 read image
+    final bytes = await _image!.readAsBytes();
+    img.Image? originalImage = img.decodeImage(bytes);
+
+    if (originalImage == null) return;
+
+    // 🔹 resize (VERY IMPORTANT)
+    img.Image resizedImage = img.copyResize(
+      originalImage,
+      width: 224,
+      height: 224,
+    );
+
+    // 🔹 convert to tensor
+    var input = List.generate(
+      1,
+      (_) => List.generate(
+        224,
+        (_) => List.generate(224, (_) => List.filled(3, 0.0)),
+      ),
+    );
+
+    for (int y = 0; y < 224; y++) {
+      for (int x = 0; x < 224; x++) {
+        final pixel = resizedImage.getPixel(x, y);
+
+        input[0][y][x][0] = pixel.r / 255.0;
+        input[0][y][x][1] = pixel.g / 255.0;
+        input[0][y][x][2] = pixel.b / 255.0;
+      }
+    }
+
+    // 🔹 output
+    var output = List.generate(1, (_) => List.filled(_labels.length, 0.0));
+
+    _interpreter!.run(input, output);
+
+    // 🔹 find result
+    double maxScore = output[0][0];
+    int maxIndex = 0;
+
+    for (int i = 0; i < _labels.length; i++) {
+      if (output[0][i] > maxScore) {
+        maxScore = output[0][i];
+        maxIndex = i;
+      }
+    }
+
+    setState(() {
+      result = "${_labels[maxIndex]} (${(maxScore * 100).toStringAsFixed(2)}%)";
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-
       body: SafeArea(
         child: Column(
           children: [
@@ -51,10 +138,7 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
                     children: [
                       Text(
                         "Animal Attack",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "Select Specific Type",
@@ -68,18 +152,17 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
 
             const SizedBox(height: 10),
 
-            // 📸 QUICK IDENTIFY BOX
+            // 📸 IMAGE BOX
             Stack(
               alignment: Alignment.bottomCenter,
               children: [
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 40),
-                  height: 220, // ✅ SAME SIZE LIKE IMAGE
+                  height: 220,
                   decoration: BoxDecoration(
                     color: Colors.black87,
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.grey),
                   ),
                   child: _image == null
                       ? const Center(
@@ -117,77 +200,15 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
               ],
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
-            // 📘 HOW TO SCAN
-            Container(
-              margin: const EdgeInsets.all(12),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blue[100],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "How to Scan",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 5),
-                  Text("1. Position the animal within the camera frame"),
-                  Text("2. Ensure good lighting"),
-                  Text("3. Tap capture button"),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 5),
-
-            // 🟧 LIST
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(10),
-                children: [
-                  emergencyTile("Snake Bite", "CRITICAL", Colors.red),
-                  emergencyTile("Insect Sting / Bite", "LOW", Colors.green),
-                  emergencyTile("Dogs , Cats Bite", "HIGH", Colors.orange),
-                  emergencyTile("Other Wild Animal", "HIGH", Colors.purple),
-                ],
-              ),
+            // 🤖 RESULT
+            Text(
+              "Result: $result",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // 🔹 TILE
-  Widget emergencyTile(String title, String level, Color color) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Text(
-              level,
-              style: const TextStyle(color: Colors.white, fontSize: 10),
-            ),
-          ),
-        ],
       ),
     );
   }

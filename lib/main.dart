@@ -4,6 +4,7 @@ import 'package:prana_ai/pages/wrapper.dart';
 import 'package:prana_ai/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:prana_ai/models/user.dart';
+import 'package:prana_ai/pages/animal_attack_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       initialData: null,
       child: MaterialApp(
-        home: const Wrapper(),
+        home: const Wrapper(), //animalattackpage()
         debugShowCheckedModeBanner: false,
       ),
     );
