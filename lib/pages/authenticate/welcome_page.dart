@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:prana_ai/pages/signup_page.dart';
-import 'package:prana_ai/services/auth.dart';
 import 'package:prana_ai/pages/login_page.dart';
-import 'package:prana_ai/pages/wrapper.dart';
 
 class WelcomePage extends StatelessWidget {
-  WelcomePage({super.key});
+  const WelcomePage({super.key});
 
-  final AuthService _auth = AuthService();
+  // ignore: unused_field - kept for future auth functionality
+  // final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {

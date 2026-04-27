@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:prana_ai/pages/Home/home.dart';
-import 'package:prana_ai/pages/authenticate/welcome_page.dart';
 import 'package:prana_ai/pages/wrapper.dart';
 import 'package:prana_ai/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +18,10 @@ class MyApp extends StatelessWidget {
     return StreamProvider<MyUser?>.value(
       value: AuthService().user,
       initialData: null,
-      child: MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false),
+      child: MaterialApp(
+        home: const Wrapper(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

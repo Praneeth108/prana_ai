@@ -168,7 +168,7 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: color),
       ),

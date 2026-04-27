@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:prana_ai/services/auth.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
-  final AuthService _auth = AuthService();
+  // ignore: unused_field - kept for future auth functionality
+  // final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
