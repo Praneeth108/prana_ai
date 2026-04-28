@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:prana_ai/pages/wrapper.dart';
 import 'package:prana_ai/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:prana_ai/models/user.dart';
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       initialData: null,
       child: MaterialApp(
-        home: const Wrapper(), //animalattackpage()
+        home: const AnimalAttackPage(), // Wrapper(), // animalattackpage()
         debugShowCheckedModeBanner: false,
       ),
     );
