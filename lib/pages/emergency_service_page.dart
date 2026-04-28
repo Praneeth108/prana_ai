@@ -1,7 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyPage extends StatelessWidget {
   const EmergencyPage({super.key});
+
+  // 📞 CALL FUNCTION (SAFE)
+  Future<void> _makeCall(String number) async {
+    final Uri phoneUri = Uri.parse("tel:$number");
+
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(
+          phoneUri,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      debugPrint("Cannot launch: $number");
+    }
+  }
+
+  // 🗺️ OPEN GOOGLE MAPS
+  Future<void> _openHospitalsMap() async {
+    final Uri url = Uri.parse(
+      "https://www.google.com/maps/search/hospitals+near+me/",
+    );
+
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +55,10 @@ class EmergencyPage extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
+                  const SizedBox(width: 10),
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -45,12 +72,15 @@ class EmergencyPage extends StatelessWidget {
                         ),
                         Text(
                           "Quick access to help",
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.phone, color: Colors.white),
+                  const Icon(Icons.phone, color: Colors.white),
                 ],
               ),
             ),
@@ -61,51 +91,63 @@ class EmergencyPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Nearby Hospitals",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            "GPS Active",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                        ),
-                      ],
+                    // 🗺️ TITLE
+                    const Text(
+                      "Nearby Hospitals",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
+
                     const SizedBox(height: 10),
 
-                    Container(
-                      height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey[300],
+                    // 🗺️ SAFE MAP BUTTON
+                    GestureDetector(
+                      onTap: _openHospitalsMap,
+                      child: Container(
+                        height: 180,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF2196F3),
+                              Color(0xFF0D47A1),
+                            ],
+                          ),
+                        ),
+                        child: const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.location_on,
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                "Tap to find nearby hospitals",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      child: const Center(child: Text("Map View")),
                     ),
 
                     const SizedBox(height: 15),
-                    // 🔥 IMAGE CARDS
+
+                    // 🔥 CARDS
                     hotlineCard(
                       "assets/images/emer.jpg",
-                      Colors.white,
                       "Emergency Services",
-                      "Police",
+                      "Police emergency service",
                       "CRITICAL",
                       const Color.fromARGB(255, 35, 3, 245),
                       "119",
@@ -113,37 +155,33 @@ class EmergencyPage extends StatelessWidget {
 
                     hotlineCard(
                       "assets/images/ambulance.jpg",
-                      Colors.white,
                       "Ambulance",
                       "Medical emergency ambulance",
                       "HIGH",
-                      const Color.fromARGB(255, 215, 4, 4),
+                      Colors.red,
                       "1990",
                     ),
 
                     hotlineCard(
                       "assets/images/fire.jpg",
-                      Colors.white,
                       "Fire Services",
                       "Fire and rescue services",
                       "HIGH",
-                      const Color.fromARGB(255, 215, 4, 4),
+                      Colors.red,
                       "110",
                     ),
 
                     hotlineCard(
                       "assets/images/poison.jpg",
-                      Colors.white,
                       "Poison Control",
                       "Poison emergencies & guidance",
                       "HIGH",
-                      const Color.fromARGB(255, 215, 4, 4),
+                      Colors.red,
                       "0112686",
                     ),
 
                     hotlineCard(
                       "assets/images/women.jpeg",
-                      Colors.white,
                       "Women Helpline",
                       "Emergency helpline for women",
                       "MEDIUM",
@@ -153,7 +191,6 @@ class EmergencyPage extends StatelessWidget {
 
                     hotlineCard(
                       "assets/images/child.jpg",
-                      Colors.white,
                       "Child Helpline",
                       "Child emergency & protection",
                       "MEDIUM",
@@ -163,7 +200,6 @@ class EmergencyPage extends StatelessWidget {
 
                     hotlineCard(
                       "assets/images/mental.jpg",
-                      Colors.white,
                       "Mental Health Support",
                       "Confidential support & crisis care",
                       "MEDIUM",
@@ -180,10 +216,9 @@ class EmergencyPage extends StatelessWidget {
     );
   }
 
-  // 🔥 CARD WITH IMAGE
+  // 🔥 CARD
   Widget hotlineCard(
     String imagePath,
-    Color bgColor,
     String title,
     String subtitle,
     String level,
@@ -200,11 +235,9 @@ class EmergencyPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // TITLE + LABEL
           Stack(
             children: [
-              Align(
-                alignment: Alignment.center,
+              Center(
                 child: Text(
                   title,
                   style: const TextStyle(
@@ -235,29 +268,19 @@ class EmergencyPage extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // 🔹 IMAGE + TEXT
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Image.asset(
-                  imagePath,
-                  height: 50,
-                  width: 100,
-                  fit: BoxFit.contain,
-                ),
-              ),
+              Image.asset(imagePath, height: 50, width: 80),
 
-              const SizedBox(width: 20),
+              const SizedBox(width: 15),
 
               Expanded(
                 child: Text(
                   subtitle,
-                  style: const TextStyle(fontSize: 15, color: Colors.black54),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ],
@@ -265,26 +288,28 @@ class EmergencyPage extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // 🔥 BUTTON
-          Align(
-            alignment: Alignment.bottomRight,
+          GestureDetector(
+            onTap: () => _makeCall(number),
             child: Container(
               width: 250,
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF53EB6A), Color(0xFF026E0D)],
+                  colors: [
+                    Color(0xFF53EB6A),
+                    Color(0xFF026E0D),
+                  ],
                 ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.phone, color: Colors.white, size: 20),
+                  const Icon(Icons.phone, color: Colors.white),
                   const SizedBox(width: 5),
                   Text(
-                    number,
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    "Call $number",
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ],
               ),
