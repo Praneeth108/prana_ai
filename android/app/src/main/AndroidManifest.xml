@@ -2,6 +2,7 @@
 
     <!-- ✅ ADD CAMERA PERMISSION HERE -->
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:label="prana_ai"
