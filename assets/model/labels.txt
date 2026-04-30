@@ -1,2 +1,16 @@
 0 Cobra
-1 King cobra
+1 Russell Viper ( Thith polaga)
+2 Common indian Krait (Thel Karawalaya )
+3 Banded Racer ( wal garadiya)
+4 Barnes's cat snake ( Paduru mapila)
+5 Beddomes cat snake ( Kaha mapila)
+6 Brown vine snake ( Henakadaya)
+7 Common cat snake (Ran mapila)
+8 Green vine snake (Ahatulla)
+9 Srilankan krait (Mudu karawala, Dunu karawala)
+10 Srilanka cat snake (Nidi mapila )
+11 Forsten's cat snake ( Le mapila , Naga mapila)
+12 Wart snake / Cloth snake (Diya naya)
+13 Red bellied coral snake (Bada Rathu depath kaluwa)
+14 Saw scaled viper ( Wali polaga)
+15 Merrem's Hump-nosed Viper ( Kuna katuwa )

@@ -36,10 +36,18 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
     );
   }
 
-  // ✅ LOAD LABELS (FIXED)
+  // ✅ LOAD LABELS (FIXED with safety)
   Future<void> loadLabels() async {
     final data = await rootBundle.loadString('assets/model/labels.txt');
-    _labels = data.split('\n');
+
+    // Split karala, empty lines ain karanna
+    _labels = data
+        .split('\n')
+        .map((e) => e.trim()) // isaraha pitipassa thiyana his than makanna
+        .where((e) => e.isNotEmpty) // his peli ain karanna
+        .toList();
+
+    print("Labels loaded: ${_labels.length}"); // Debug karanna lesi wenna
   }
 
   // 📸 OPEN CAMERA
@@ -96,11 +104,19 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
 
     _interpreter!.run(input, output);
 
+    // 🔹 output
+    // labels.length wenuwata, 16 kiyala direct danna ho safety check ekak danna.
+    // Hondama de thamai 16 (model eke size eka) use karana eka:
+    output = List.generate(1, (_) => List.filled(16, 0.0));
+
+    _interpreter!.run(input, output);
+
     // 🔹 find result
     double maxScore = output[0][0];
     int maxIndex = 0;
 
-    for (int i = 0; i < _labels.length; i++) {
+    // Methana _labels.length noda output eke size eka danna.
+    for (int i = 0; i < 16; i++) {
       if (output[0][i] > maxScore) {
         maxScore = output[0][i];
         maxIndex = i;
@@ -108,7 +124,13 @@ class _AnimalAttackPageState extends State<AnimalAttackPage> {
     }
 
     setState(() {
-      result = "${_labels[maxIndex]} (${(maxScore * 100).toStringAsFixed(2)}%)";
+      // Index eka labels.length ekata wada wedinm kiyala check karanawa.
+      if (maxIndex < _labels.length) {
+        result =
+            "${_labels[maxIndex]} (${(maxScore * 100).toStringAsFixed(2)}%)";
+      } else {
+        result = "Unknown (Index $maxIndex)";
+      }
     });
   }
 
