@@ -1,23 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:prana_ai/pages/firstaid_page.dart';
+import 'package:prana_ai/pages/burn.dart';
+import 'package:prana_ai/pages/electric_shock.dart';
+import 'package:prana_ai/pages/fainting.dart';
+import 'package:prana_ai/pages/road_accident.dart' as ra;
+import 'package:prana_ai/services/auth.dart';
+import 'package:prana_ai/pages/heavy_bleeding.dart';
 
-//  Import your real pages
+import 'package:prana_ai/pages/firstaid_page.dart';
 import 'package:prana_ai/pages/settings_page.dart';
 import 'package:prana_ai/pages/emergency_service_page.dart';
 import 'package:prana_ai/pages/animal_attack_page.dart';
+import 'package:prana_ai/pages/Patient/available_doctors_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _auth = AuthService();
+
     return Scaffold(
       backgroundColor: Colors.green[100],
+
+      // ADDED APPBAR WITH LOGOUT BUTTON ONLY
+      appBar: AppBar(
+        title: const Text(
+          "PRANA AID",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Colors.teal,
+        actions: [
+          Text("Logout", style: TextStyle(fontSize: 16, color: Colors.white)),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () async {
+              await _auth.signOut();
+            },
+          ),
+        ],
+      ),
 
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //  HEADER
             Container(
               padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
               decoration: const BoxDecoration(
@@ -48,15 +73,17 @@ class HomePage extends StatelessWidget {
                           "PRANA AID\nEmergency support system",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-
-                      //  SETTINGS
                       IconButton(
-                        icon: const Icon(Icons.settings, color: Colors.white),
+                        icon: const Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                          size: 40,
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -68,9 +95,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: const [
@@ -79,15 +104,12 @@ class HomePage extends StatelessWidget {
                       FeatureIcon("AI\nPowered"),
                     ],
                   ),
-
                   const SizedBox(height: 10),
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
-            //  EMERGENCY BUTTON
+            // Emergency call button
             Padding(
               padding: const EdgeInsets.all(12),
               child: GestureDetector(
@@ -121,18 +143,49 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
+            const SizedBox(height: 20),
+
+            // video call button
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AvailableDoctorsPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 16, 22, 91),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "VIDEO CALL TO DOCTOR",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             const Text(
               "Quick Access",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-
             const SizedBox(height: 5),
-
             const Text("Select Emergency Type"),
-
             const SizedBox(height: 12),
-
-            //  GRID
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
@@ -148,8 +201,6 @@ class HomePage extends StatelessWidget {
                 emergencyCard(context, "Fainting", Icons.sick),
               ],
             ),
-
-            //  QUICK ACTIONS
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -158,10 +209,7 @@ class HomePage extends StatelessWidget {
                     "Quick Actions",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-
                   const SizedBox(height: 10),
-
-                  // First Aid Button
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -175,7 +223,7 @@ class HomePage extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blueGrey,
+                        color: const Color.fromARGB(255, 55, 106, 131),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Center(
@@ -190,10 +238,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 15),
-
-                  // Safety Box
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
@@ -229,7 +274,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  //  Emergency Card
   Widget emergencyCard(BuildContext context, String title, IconData icon) {
     return GestureDetector(
       onTap: () {
@@ -257,18 +301,32 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  //  Navigation switch
   Widget getPage(String title) {
     switch (title) {
       case "Animal Attack":
         return const AnimalAttackPage();
+
+      case "Electric Shock":
+        return const ElectricShockPage();
+
+      case "Road Accident":
+        return const ra.RoadAccident();
+
+      case "Burns":
+        return const BurnScreen();
+
+      case "Fainting":
+        return const Fainting();
+
+      case "Heavy Bleeding":
+        return const HeavyBleedingPage();
+
       default:
         return const EmergencyPage();
     }
   }
 }
 
-//  Feature Icon
 class FeatureIcon extends StatelessWidget {
   final String text;
   const FeatureIcon(this.text, {super.key});

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prana_ai/pages/authenticate/welcome_page.dart';
+import 'package:prana_ai/pages/login_page.dart';
+import 'package:prana_ai/pages/signup_page.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});
@@ -9,8 +10,18 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+  bool showSignIn = true;
+
+  void toggleView() {
+    setState(() => showSignIn = !showSignIn);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WelcomePage();
+    if (showSignIn) {
+      return LoginPage(toggleView: toggleView);
+    } else {
+      return SignUpPage(toggleView: toggleView);
+    }
   }
 }

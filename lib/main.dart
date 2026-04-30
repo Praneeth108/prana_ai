@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:prana_ai/pages/Home/home.dart';
-import 'package:prana_ai/pages/authenticate/welcome_page.dart';
 import 'package:prana_ai/pages/wrapper.dart';
 import 'package:prana_ai/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -10,17 +8,22 @@ import 'package:prana_ai/models/user.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<MyUser?>.value(
       value: AuthService().user,
       initialData: null,
-      child: MaterialApp(home: HomePage(), debugShowCheckedModeBanner: false),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Wrapper(),
+      ),
     );
   }
 }

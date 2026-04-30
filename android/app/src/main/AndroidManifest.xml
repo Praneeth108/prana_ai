@@ -3,6 +3,21 @@
     <!-- ✅ ADD CAMERA PERMISSION HERE -->
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <!-- ADD calls permission -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <!--Video call permission-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <queries>
+    <intent>
+        <action android:name="android.intent.action.DIAL" />
+        <data android:scheme="tel" />
+    </intent>
+</queries>
+
     <application
         android:label="prana_ai"
         android:name="${applicationName}"

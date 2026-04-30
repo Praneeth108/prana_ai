@@ -1,98 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:prana_ai/services/auth.dart';
 
+class SignUpPage extends StatefulWidget {
+  final Function toggleView;
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
-  
+  const SignUpPage({super.key, required this.toggleView});
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  final AuthService _auth = AuthService();
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[700],
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
-        bottom: false,
         top: false,
+        bottom: false,
         child: Container(
           width: double.infinity,
           height: double.infinity,
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10),
-          ),
+          color: Colors.grey[10],
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Back Button
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey[300],
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                // Logo
-                Image.asset("assets/images/logo.jpeg", height: 80),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  "",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-
                 const SizedBox(height: 20),
 
-                // Username
-                buildTextField("User name", Icons.person),
+                Image.asset("assets/images/logo.jpeg", height: 150),
+
+                const SizedBox(height: 30),
+
+                _input(nameController, "User name", Icons.person),
+                _input(emailController, "Email", Icons.email),
+                _input(passwordController, "Password", Icons.lock, true),
+                _input(phoneController, "Telephone", Icons.phone),
 
                 const SizedBox(height: 10),
 
-                // Email
-                buildTextField("Email", Icons.email),
+                Text(error, style: const TextStyle(color: Colors.red)),
 
                 const SizedBox(height: 10),
 
-                // Password
-                buildTextField("Password", Icons.lock, isPassword: true),
+                // ✅ SIGN UP BUTTON
+                GestureDetector(
+                  onTap: () async {
+                    String email = emailController.text.trim();
+                    String password = passwordController.text.trim();
 
-                const SizedBox(height: 10),
+                    if (email.isEmpty || password.length < 6) {
+                      setState(() {
+                        error = "Enter valid email & password (6+ chars)";
+                      });
+                      return;
+                    }
 
-                // Telephone
-                buildTextField("Telephone", Icons.phone, hint: "07X-XXXXXXX"),
+                    final result = await _auth.register(email, password);
 
-                const SizedBox(height: 20),
-
-                // Sign Up Button
-                Container(
-                  width: 250,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.green, Colors.blue],
+                    if (result == null) {
+                      setState(() {
+                        error = "Signup failed";
+                      });
+                    }
+                  },
+                  child: Container(
+                    width: 250,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.green, Colors.blue],
+                      ),
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    child: const Center(
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -100,25 +97,15 @@ class SignUpPage extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-                const Text(
-                  "OR",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-
-                const SizedBox(height: 5),
-
-                const Text("Sign Up using"),
-
-                const SizedBox(height: 10),
-
-                // Social Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    socialIcon("assets/images/google.png"),
-                    socialIcon("assets/images/facebook.png"),
-                    socialIcon("assets/images/instagram.png"),
-                  ],
+                // 🔁 SWITCH TO LOGIN
+                TextButton(
+                  onPressed: () {
+                    widget.toggleView();
+                  },
+                  child: const Text(
+                    "Already have an account?   Sign In",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ],
             ),
@@ -128,47 +115,23 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  // TextField Widget
-  Widget buildTextField(
+  Widget _input(
+    TextEditingController controller,
     String label,
-    IconData icon, {
+    IconData icon, [
     bool isPassword = false,
-    String hint = "",
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label),
-        const SizedBox(height: 5),
-        TextField(
-          obscureText: isPassword,
-          decoration: InputDecoration(
-            hintText: hint,
-            prefixIcon: Icon(icon, size: 20), // smaller icon
-            suffixIcon: isPassword
-                ? const Icon(Icons.visibility_off, size: 20)
-                : null,
-            isDense: true, // important
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 10, // reduce height
-              horizontal: 10,
-            ),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-          ),
+  ]) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+          labelText: label,
         ),
-      ],
-    );
-  }
-
-  // Social Icon Widget
-  Widget socialIcon(String path) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(10),
       ),
-      child: Image.asset(path, height: 25, width: 25),
     );
   }
 }

@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:prana_ai/services/auth.dart';
+import 'package:prana_ai/services/google_sign_in.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  final Function toggleView;
 
+  const LoginPage({super.key, required this.toggleView});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final AuthService _auth = AuthService();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "PRANA   AID",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 36,
+            color: Color.fromARGB(255, 2, 161, 185),
+          ),
+        ),
+      ),
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -17,114 +41,113 @@ class LoginPage extends StatelessWidget {
               Color.fromARGB(156, 229, 229, 229),
               Color.fromARGB(156, 250, 249, 246),
             ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              // Top Icons
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.black),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.edit,
-                        color: Color.fromARGB(255, 255, 77, 0),
-                      ),
-                    ),
-                  ],
-                ),
+              const SizedBox(height: 60),
+
+              const CircleAvatar(
+                radius: 80,
+                backgroundImage: AssetImage("assets/images/profile1.jpg"),
               ),
+
+              const SizedBox(height: 50),
+
+              // EMAIL
+              _inputField(
+                controller: emailController,
+                label: "Email",
+                icon: Icons.email,
+                obscure: false,
+              ),
+
+              const SizedBox(height: 20),
+
+              // PASSWORD
+              _inputField(
+                controller: passwordController,
+                label: "Password",
+                icon: Icons.lock,
+                obscure: true,
+              ),
+
+              const SizedBox(height: 20),
+
+              Text(error, style: const TextStyle(color: Colors.red)),
 
               const SizedBox(height: 40),
 
-              // Avatar Image
-              const CircleAvatar(
-                radius: 80,
-                backgroundImage: AssetImage("assets/images/doctor.png"),
+              // ✅ LOGIN BUTTON
+              GestureDetector(
+                onTap: () async {
+                  final email = emailController.text.trim();
+                  final password = passwordController.text.trim();
+
+                  final result = await _auth.signIn(email, password);
+
+                  if (result == null) {
+                    setState(() {
+                      error = "Invalid email or password";
+                    });
+                  }
+                },
+                child: Container(
+                  width: 250,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 98, 255, 111),
+                        Color.fromARGB(255, 50, 165, 157),
+                        Color.fromARGB(255, 1, 9, 147),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ),
 
-              const SizedBox(height: 80),
+              const SizedBox(height: 20),
 
-              _inputField(
-                label: "User name",
-                icon: Icons.person,
-                obscure: false,
+              // 🔁 SWITCH TO REGISTER
+              TextButton(
+                onPressed: () {
+                  widget.toggleView();
+                },
+                child: const Text(
+                  "Don't have an account?   Register",
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
 
               const SizedBox(height: 30),
 
-              _inputField(label: "Password", icon: Icons.lock, obscure: true),
-
-              const SizedBox(height: 5),
-
-              const Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(right: 50),
-                  child: Text(
-                    "Forgot Password",
-                    style: TextStyle(fontSize: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  socialIcon(
+                    'assets/images/google.png',
+                    onTap: () async {
+                      await signInWithGoogle();
+                    },
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 100),
-
-              // Login Button
-              Container(
-                width: 250,
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 98, 255, 111),
-                      Color.fromARGB(255, 50, 165, 157),
-                      Color.fromARGB(255, 1, 9, 147),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-
-              const Spacer(),
-
-              // Bottom Icons
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                decoration: const BoxDecoration(color: Colors.white24),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.calendar_month, size: 40),
-                    Icon(Icons.person, size: 40),
-                    Icon(Icons.medical_services, size: 40),
-                  ],
-                ),
+                  const SizedBox(width: 20),
+                  socialIcon('assets/images/facebook.png'),
+                  const SizedBox(width: 20),
+                  socialIcon('assets/images/instagram.png'),
+                ],
               ),
             ],
           ),
@@ -133,8 +156,8 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  // Reusable input field
   Widget _inputField({
+    required TextEditingController controller,
     required String label,
     required IconData icon,
     required bool obscure,
@@ -142,17 +165,30 @@ class LoginPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: TextField(
+        controller: controller,
         obscureText: obscure,
         decoration: InputDecoration(
-          isDense: true,
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: 10,
-          ),
           prefixIcon: Icon(icon),
-          suffixIcon: obscure ? const Icon(Icons.visibility_off) : null,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
           labelText: label,
+        ),
+      ),
+    );
+  }
+
+  static Widget socialIcon(String asset, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Image.asset(asset),
         ),
       ),
     );

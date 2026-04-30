@@ -4,31 +4,56 @@ import 'package:prana_ai/models/user.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // create firebaseUser user obj
+  // Convert Firebase user → MyUser
   MyUser? userFromFirebaseUser(User? user) {
     return user != null ? MyUser(uid: user.uid) : null;
   }
 
-  //  auth change user stream
+  // Auth state stream
   Stream<MyUser?> get user {
     return _auth.authStateChanges().map(userFromFirebaseUser);
   }
 
-  // ✅ Sign in anonymously
-  Future<MyUser?> signInAnon() async {
+  // ✅ Sign in with Email
+  Future<MyUser?> signIn(String email, String password) async {
     try {
-      UserCredential result = await _auth.signInAnonymously();
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       return userFromFirebaseUser(result.user);
     } on FirebaseAuthException catch (e) {
-      print("Firebase Error: ${e.message}");
-      return null;
-    } catch (e) {
-      print("Unknown Error: $e");
+      print("Login Error: ${e.message}");
       return null;
     }
   }
 
-  //  Sign out
+  // ✅ Register new user
+  Future<MyUser?> register(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userFromFirebaseUser(result.user);
+    } on FirebaseAuthException catch (e) {
+      print("Register Error: ${e.message}");
+      return null;
+    }
+  }
+
+  // Optional: Anonymous login
+  Future<MyUser?> signInAnon() async {
+    try {
+      UserCredential result = await _auth.signInAnonymously();
+      return userFromFirebaseUser(result.user);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  // Sign out
   Future<void> signOut() async {
     try {
       await _auth.signOut();
