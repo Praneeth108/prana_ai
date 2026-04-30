@@ -8,9 +8,13 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   firebase_auth
   firebase_core
+<<<<<<< HEAD
   iris_method_channel
   permission_handler_windows
   url_launcher_windows
+=======
+  tflite_flutter_helper
+>>>>>>> 9773991bc7de6b64115f9260973683409367a52d
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

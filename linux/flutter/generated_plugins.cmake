@@ -4,7 +4,12 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_linux
+<<<<<<< HEAD
   url_launcher_linux
+=======
+  tflite_flutter
+  tflite_flutter_helper
+>>>>>>> 9773991bc7de6b64115f9260973683409367a52d
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

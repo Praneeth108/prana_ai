@@ -11,9 +11,13 @@
 #include <file_selector_windows/file_selector_windows.h>
 #include <firebase_auth/firebase_auth_plugin_c_api.h>
 #include <firebase_core/firebase_core_plugin_c_api.h>
+<<<<<<< HEAD
 #include <iris_method_channel/iris_method_channel_plugin_c_api.h>
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
 #include <url_launcher_windows/url_launcher_windows.h>
+=======
+#include <tflite_flutter_helper/tflite_flutter_helper_plugin.h>
+>>>>>>> 9773991bc7de6b64115f9260973683409367a52d
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   AgoraRtcEnginePluginRegisterWithRegistrar(
@@ -26,10 +30,15 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("FirebaseAuthPluginCApi"));
   FirebaseCorePluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FirebaseCorePluginCApi"));
+<<<<<<< HEAD
   IrisMethodChannelPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("IrisMethodChannelPluginCApi"));
   PermissionHandlerWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+=======
+  TfliteFlutterHelperPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("TfliteFlutterHelperPlugin"));
+>>>>>>> 9773991bc7de6b64115f9260973683409367a52d
 }
