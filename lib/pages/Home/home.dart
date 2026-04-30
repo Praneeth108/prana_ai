@@ -10,11 +10,7 @@ import 'package:prana_ai/pages/firstaid_page.dart';
 import 'package:prana_ai/pages/settings_page.dart';
 import 'package:prana_ai/pages/emergency_service_page.dart';
 import 'package:prana_ai/pages/animal_attack_page.dart';
-<<<<<<< HEAD
 import 'package:prana_ai/pages/Patient/available_doctors_page.dart';
-=======
-import 'package:prana_ai/pages/heavy_bleeding_page.dart';
->>>>>>> 9773991bc7de6b64115f9260973683409367a52d
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -309,7 +305,6 @@ class HomePage extends StatelessWidget {
     switch (title) {
       case "Animal Attack":
         return const AnimalAttackPage();
-<<<<<<< HEAD
 
       case "Electric Shock":
         return const ElectricShockPage();
@@ -326,10 +321,6 @@ class HomePage extends StatelessWidget {
       case "Heavy Bleeding":
         return const HeavyBleedingPage();
 
-=======
-      case "Heavy Bleeding":
-        return const HeavyBleedingPage();
->>>>>>> 9773991bc7de6b64115f9260973683409367a52d
       default:
         return const EmergencyPage();
     }

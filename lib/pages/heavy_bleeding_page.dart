@@ -5,9 +5,7 @@ class HeavyBleedingPage extends StatelessWidget {
 
   Widget stepCard(String title, String description, IconData icon) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
@@ -15,10 +13,7 @@ class HeavyBleedingPage extends StatelessWidget {
           backgroundColor: Colors.red.shade100,
           child: Icon(icon, color: Colors.red),
         ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(description),
       ),
     );
